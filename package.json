@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.1",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
+  },
+  "name": "cinema",
+  "description": "cinema",
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
+  "author": "",
+  "license": "ISC"
+}
