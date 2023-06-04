@@ -3,6 +3,7 @@ const HTMLWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
+    watch: true,
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: {
@@ -31,5 +32,10 @@ module.exports = {
                 loader: 'html-loader',
             }
         ]
-    }
+    },
+    devServer: {
+        port: 8000,
+        open: true,
+        hot: true,
+    },
 }

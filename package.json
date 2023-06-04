@@ -11,9 +11,13 @@
   "version": "1.0.0",
   "main": "webpack.config.js",
   "scripts": {
+    "start": "webpack-dev-server --mode development",
     "dev": "webpack --mode development",
     "build": "webpack --mode production"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "webpack-dev-server": "^4.15.0"
+  }
 }
