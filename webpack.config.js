@@ -1,6 +1,7 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const PugPlugin = require('pug-plugin');
 
 module.exports = {
     watch: true,
@@ -16,20 +17,23 @@ module.exports = {
     },
     plugins: [
         new HTMLWebpackPlugin({
-            template: './frontend/index.html',
-            filename: "index.html",
-            inject: true,
-            templateParameters: {
-                testContent: "<h1>Hello!</h1>"
-            }
+            template: './frontend/index.pug'
         }),
         new CleanWebpackPlugin()
     ],
     module: {
         rules: [
             {
-                test: /\.html$/i,
-                loader: 'html-loader',
+                test: /\.pug$/,
+                loader: PugPlugin.loader
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    "style-loader",
+                    "css-loader",
+                    "sass-loader",
+                ]
             }
         ]
     },
