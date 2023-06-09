@@ -1,5 +1,4 @@
 const path = require('path');
-const HTMLWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const PugPlugin = require('pug-plugin');
 
@@ -9,15 +8,16 @@ module.exports = {
     mode: 'development',
     entry: {
         main: './frontend/js/app.js',
-        "order-ticket": './frontend/modules/order-ticket/index.js'
+        "order-ticket": './frontend/modules/order-ticket/index.js',
+        index: './frontend/index.pug'
     },
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist')
     },
     plugins: [
-        new HTMLWebpackPlugin({
-            template: './frontend/index.pug'
+        new PugPlugin({
+            pretty: true, // enable formatting of HTML
         }),
         new CleanWebpackPlugin()
     ],
