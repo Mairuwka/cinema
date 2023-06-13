@@ -1,25 +1,32 @@
 const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const PugPlugin = require('pug-plugin');
+const webpack = require('webpack')
 
 module.exports = {
     watch: true,
     context: path.resolve(__dirname, 'src'),
+    target: 'web',
     mode: 'development',
     entry: {
         main: './frontend/js/app.js',
         "order-ticket": './frontend/modules/order-ticket/index.js',
-        index: './frontend/index.pug'
     },
     output: {
         filename: '[name].[contenthash].js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
+        clean: true
     },
     plugins: [
-        new PugPlugin({
-            pretty: true, // enable formatting of HTML
+        new HTMLWebpackPlugin({
+            template: './frontend/index.pug'
         }),
-        new CleanWebpackPlugin()
+        new HTMLWebpackPlugin({
+            template: './frontend/modules/order-ticket/ui/order-ticket.pug',
+            filename: "order-ticket.html"
+        }),
+        new CleanWebpackPlugin(),
     ],
     module: {
         rules: [
@@ -38,8 +45,11 @@ module.exports = {
         ]
     },
     devServer: {
-        port: 8000,
-        open: true,
+        port: 9000,
         hot: true,
+        open: true,
+        static: {
+            directory: path.join(__dirname, './'),
+        },
     },
 }
