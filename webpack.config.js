@@ -2,7 +2,6 @@ const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const PugPlugin = require('pug-plugin');
-const webpack = require('webpack')
 
 module.exports = {
     watch: true,

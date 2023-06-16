@@ -13,11 +13,18 @@
     justify-content: space-around;
     text-decoration: none;
     color: black;
-    background-color: aquamarine;
     width: 400px;
     height: 70px;
     border: 1px solid black;
     border-radius: 8px;
     padding: 10px;
     margin-top: 20px;
+
+    &-active {
+        background-color: aquamarine;
+    }
+
+    &-inactive {
+        background-color: gray;
+    }
 }

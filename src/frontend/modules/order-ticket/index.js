@@ -1,43 +1,52 @@
-import SessionDate from "./services/SessionDate";
-import Sessions from "./services/Sessions";
+import { Sessions } from "./services/Sessions";
+import { Validation } from "../../js/helpers/Validation";
 
 import dayjs from 'dayjs';
 import './ui/styles/style.scss';
 
 const datepicker = document.querySelector('.date-picker');
-
 const date = dayjs();
+const currentFormatDate = date;
+datepicker.value = currentFormatDate.format("YYYY-MM-DD");
+datepicker.addEventListener('change', showSessionInPage)
 
-const currentFormatDate = date.format('YYYY-MM-DD');
-
-datepicker.addEventListener('change', addSessionInPage)
-
-datepicker.value = currentFormatDate;
-
-let sessionDate = new SessionDate();
 let sessions = new Sessions();
 
-sessionDate.setSessionData(currentFormatDate);
+sessions.setSession(currentFormatDate);
+showSessionInPage(currentFormatDate.format('YYYY-MM-DD'))
 
-addSessionInPage(currentFormatDate)
+function showSessionInPage(currentDate = null) {
+    let date = this ? this.value : currentDate;
+    let key = this ? this.value : currentDate;
 
-function addSessionInPage(currentDate = null) {
-    let sessionsForDay = sessions.getSessionsData('schedule', this ? this.value : currentDate)
+    const sessionsForDay = sessions.getSessions(key, date)
 
     const blockSessions = document.querySelector('.sessions')
 
     blockSessions.innerHTML = '';
 
-    if(!Array.isArray(sessionsForDay)) {
+    if(!sessionsForDay) {
         blockSessions.innerHTML = 'Сеансов на заданный день нет';
         return;
     }
 
     for (const session in sessionsForDay) {
+        const title = sessionsForDay[session].title;
+        const startTime = sessionsForDay[session].startTime;
+        const endTime = sessionsForDay[session].endTime;
+
+        const formattedStartTime = dayjs(startTime).format('HH:mm');
+        const formattedEndTime = dayjs(endTime).format('HH:mm');
+
+        let cardActive = true;
+        if(Validation.hasTimePassedSession(startTime)) {
+            cardActive = false
+        }
+
         let sessionBlock = `
-            <a href="#" class="card">
-                <div class="card-title">${sessionsForDay[session].title}</div>
-                <div class="card-time">${sessionsForDay[session].sessionStartTime} - ${sessionsForDay[session].sessionEndTime}</div>
+            <a href="#" class="card ${cardActive ? 'card-active' : 'card-inactive'}">
+                <div class="card__title">${title}</div>
+                <div class="card__timestamp">${formattedStartTime} - ${formattedEndTime}</div>
             </a>
         `
         blockSessions.innerHTML += sessionBlock;
