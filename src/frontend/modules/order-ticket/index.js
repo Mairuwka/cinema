@@ -10,14 +10,14 @@ const currentFormatDate = date;
 datepicker.value = currentFormatDate.format("YYYY-MM-DD");
 datepicker.addEventListener('change', showSessionInPage)
 
-let sessions = new Sessions();
+const sessions = new Sessions();
 
-sessions.setSession(currentFormatDate);
+sessions.setSessions(currentFormatDate);
 showSessionInPage(currentFormatDate.format('YYYY-MM-DD'))
 
 function showSessionInPage(currentDate = null) {
-    let date = this ? this.value : currentDate;
-    let key = this ? this.value : currentDate;
+    const date = this ? this.value : currentDate;
+    const key = this ? this.value : currentDate;
 
     const sessionsForDay = sessions.getSessions(key, date)
 
@@ -30,16 +30,18 @@ function showSessionInPage(currentDate = null) {
         return;
     }
 
-    for (const session in sessionsForDay) {
-        const title = sessionsForDay[session].title;
-        const startTime = sessionsForDay[session].startTime;
-        const endTime = sessionsForDay[session].endTime;
+    let blockSessionsStr = '';
+
+    for (const session of sessionsForDay) {
+        const title = session.title;
+        const startTime = session.startTime;
+        const endTime = session.endTime;
 
         const formattedStartTime = dayjs(startTime).format('HH:mm');
         const formattedEndTime = dayjs(endTime).format('HH:mm');
 
         let cardActive = true;
-        if(Validation.hasTimePassedSession(startTime)) {
+        if(Validation.isCurrentTimeAfter(startTime)) {
             cardActive = false
         }
 
@@ -49,6 +51,8 @@ function showSessionInPage(currentDate = null) {
                 <div class="card__timestamp">${formattedStartTime} - ${formattedEndTime}</div>
             </a>
         `
-        blockSessions.innerHTML += sessionBlock;
+        blockSessionsStr += sessionBlock;
     }
+
+    blockSessions.innerHTML = blockSessionsStr;
 }

@@ -23,6 +23,5 @@
     "build": "webpack --mode production"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {}
+  "license": "ISC"
 }

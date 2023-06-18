@@ -1,36 +1,42 @@
 import { LocalStorage } from "../../../js/helpers/LocalStorage";
 import { Session } from "./Session"
 import dayjs from "dayjs";
-const isBetween = require('dayjs/plugin/isBetween');
+import isBetween from "dayjs/plugin/isBetween"
 dayjs.extend(isBetween);
 
 export class Sessions {
-    setSession(date) {
+    constructor() {
+        this.sessions = {};
+        this.amountSession = 6;
+        this.sessionDuration = 2;
+    }
+    setSessions(date) {
         if(this.isWithinRange(date))
-            LocalStorage.set(date.format('YYYY-MM-DD'), this.createSessionsArr(date));
+            this.createSessions(date);
     }
 
     getSessions(key, date) {
         let selectedDate = dayjs(date);
-        this.setSession(selectedDate)
 
-        return LocalStorage.get(key);
+        if(!LocalStorage.get(selectedDate.format('YYYY-MM-DD'))){
+            this.setSessions(selectedDate)
+        }
+
+        return this.sessions[key];
     }
 
-    createSessionsArr(date) {
+    createSessions(date) {
         const sessionsDayArr = [];
 
         const minSessionStartTime = dayjs(date).set("hour", 10).set("minute", 0);
-        const sessionDate = date;
-        const sessionDuration = 2;
 
-        for (let i = 0; i < 6; i++) {
-            const sessionStartTime = minSessionStartTime.add(i * sessionDuration, 'hour');
-            const sessionEndTime = sessionStartTime.add(sessionDuration, 'hour');
+        for (let i = 0; i < this.amountSession; i++) {
+            const sessionStartTime = minSessionStartTime.add(i * this.sessionDuration, 'hour');
+            const sessionEndTime = sessionStartTime.add(this.sessionDuration, 'hour');
 
             sessionsDayArr.push(new Session({
                 "title": "Terminator",
-                "date": sessionDate,
+                "date": date,
                 "startTime": sessionStartTime,
                 "endTime": sessionEndTime,
                 "totalSeats": 50,
@@ -38,7 +44,10 @@ export class Sessions {
             }))
         }
 
-        return sessionsDayArr;
+        const formattedDate = date.format('YYYY-MM-DD')
+
+        LocalStorage.set(formattedDate, sessionsDayArr);
+        this.sessions[formattedDate] = sessionsDayArr;
     }
 
     isWithinRange(dateToCheck) {
