@@ -45,12 +45,7 @@ function showSessionInPage(currentDate = null) {
             cardActive = false
         }
 
-        let sessionBlock = `
-            <a href="#" class="card ${cardActive ? 'card-active' : 'card-inactive'}">
-                <div class="card__title">${title}</div>
-                <div class="card__timestamp">${formattedStartTime} - ${formattedEndTime}</div>
-            </a>
-        `
+        let sessionBlock = sessions.createSessionBlock(title, formattedStartTime, formattedEndTime, cardActive)
         blockSessionsStr += sessionBlock;
     }
 

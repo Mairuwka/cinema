@@ -57,4 +57,13 @@ export class Sessions {
 
         return dateToCheck.isBetween(startDate, endDate, null, '[]');
     }
+
+    createSessionBlock(title, start, end, active) {
+        return `
+            <a href="#" class="card ${active ? 'card-active' : 'card-inactive'}">
+                <div class="card__title">${title}</div>
+                <div class="card__timestamp">${start} - ${end}</div>
+            </a>
+        `
+    }
 }
