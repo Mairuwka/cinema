@@ -3,12 +3,16 @@ import { Session } from "./Session";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
+import {
+  MAX_DURATION_SESSION,
+  MAX_COUNT_SHOW_SESSION,
+} from "@/constants/constants";
 
-export class Sessions {
+export class SessionsService {
   constructor() {
     this.sessions = {};
-    this.amountSession = 6;
-    this.sessionDuration = 2;
+    this.amountSession = MAX_COUNT_SHOW_SESSION;
+    this.sessionDuration = MAX_DURATION_SESSION;
   }
   setSessions(date) {
     if (this.isWithinRange(date)) this.createSessions(date);
@@ -27,8 +31,16 @@ export class Sessions {
   }
 
   createSessions(date) {
-    const sessionsDayArr = [];
+    const daySessions = this._generateSessions(date);
 
+    const formattedDate = date.format("YYYY-MM-DD");
+
+    LocalStorage.set(formattedDate, daySessions);
+    this.sessions[formattedDate] = daySessions;
+  }
+
+  _generateSessions(date) {
+    const resultSessions = [];
     const minSessionStartTime = dayjs(date).set("hour", 10).set("minute", 0);
 
     for (let i = 0; i < this.amountSession; i++) {
@@ -38,7 +50,7 @@ export class Sessions {
       );
       const sessionEndTime = sessionStartTime.add(this.sessionDuration, "hour");
 
-      sessionsDayArr.push(
+      resultSessions.push(
         new Session({
           title: "Terminator",
           date: date,
@@ -50,10 +62,7 @@ export class Sessions {
       );
     }
 
-    const formattedDate = date.format("YYYY-MM-DD");
-
-    LocalStorage.set(formattedDate, sessionsDayArr);
-    this.sessions[formattedDate] = sessionsDayArr;
+    return resultSessions;
   }
 
   isWithinRange(dateToCheck) {

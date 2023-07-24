@@ -1,19 +1,48 @@
 <template>
-  <li>
-    <a class="card" :class="[active ? 'card-active' : 'card-inactive']">
+  <li class="card-container">
+    <a class="card" :class="[isActiveCard ? 'card-active' : 'card-inactive']">
       <div class="card__title">{{ title }}</div>
-      <div class="card__timestamp">{{ start }} - {{ end }}</div>
+      <div class="card__timestamp">
+        {{ sessionStartTime }} - {{ sessionEndTime }}
+      </div>
     </a>
   </li>
 </template>
 
 <script>
 export default {
-  props: ["title", "start", "end", "active"],
+  props: {
+    title: {
+      type: String,
+      default: "Title",
+    },
+    sessionStartTime: {
+      type: String,
+      default: "StartTime",
+    },
+    sessionEndTime: {
+      type: String,
+      default: "EndTime",
+    },
+    isActiveCard: {
+      type: Boolean,
+      default: true,
+    },
+  },
 };
 </script>
 
 <style lang="scss">
+.card-container {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .card {
   display: block;
   width: 200px;
@@ -43,16 +72,6 @@ export default {
   &-active {
     background-color: #42b983;
     color: #fff;
-  }
-}
-
-li {
-  display: flex;
-  justify-content: center;
-  margin: 16px 0;
-
-  &:last-child {
-    margin-bottom: 0;
   }
 }
 </style>
