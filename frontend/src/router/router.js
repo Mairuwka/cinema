@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import SessionShedule from "@/components/pages/SessionShedule.vue";
+import SessionPage from "@/components/pages/SessionPage.vue";
 
 Vue.use(VueRouter);
 
@@ -8,7 +8,7 @@ const routes = [
   {
     path: "/",
     name: "sessions",
-    component: SessionShedule,
+    component: SessionPage,
   },
 ];
 

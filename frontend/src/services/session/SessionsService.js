@@ -6,7 +6,7 @@ dayjs.extend(isBetween);
 import {
   MAX_DURATION_SESSION,
   MAX_COUNT_SHOW_SESSION,
-} from "@/constants/constants";
+} from "@/components/sessions/constants/constants";
 
 export class SessionsService {
   constructor() {
@@ -18,7 +18,7 @@ export class SessionsService {
     if (this.isWithinRange(date)) this.createSessions(date);
   }
 
-  getSessions(key, date) {
+  getSessions(date) {
     let selectedDate = dayjs(date);
 
     if (!LocalStorage.get(selectedDate.format("YYYY-MM-DD"))) {
@@ -26,7 +26,7 @@ export class SessionsService {
     }
 
     return (
-      this.sessions[key] ?? LocalStorage.get(selectedDate.format("YYYY-MM-DD"))
+      this.sessions[date] ?? LocalStorage.get(selectedDate.format("YYYY-MM-DD"))
     );
   }
 
@@ -40,29 +40,24 @@ export class SessionsService {
   }
 
   _generateSessions(date) {
-    const resultSessions = [];
     const minSessionStartTime = dayjs(date).set("hour", 10).set("minute", 0);
 
-    for (let i = 0; i < this.amountSession; i++) {
+    return Array.from({ length: this.amountSession }, (_, elem) => {
       const sessionStartTime = minSessionStartTime.add(
-        i * this.sessionDuration,
+        elem * this.sessionDuration,
         "hour"
       );
       const sessionEndTime = sessionStartTime.add(this.sessionDuration, "hour");
 
-      resultSessions.push(
-        new Session({
-          title: "Terminator",
-          date: date,
-          startTime: sessionStartTime,
-          endTime: sessionEndTime,
-          totalSeats: 50,
-          ticketsSold: 0,
-        })
-      );
-    }
-
-    return resultSessions;
+      return new Session({
+        title: "Terminator",
+        date: date,
+        startTime: sessionStartTime,
+        endTime: sessionEndTime,
+        totalSeats: 50,
+        ticketsSold: 0,
+      });
+    });
   }
 
   isWithinRange(dateToCheck) {
@@ -73,14 +68,10 @@ export class SessionsService {
     return dateToCheck.isBetween(startDate, endDate, null, "[]");
   }
 
-  createSessionBlock(title, start, end, active) {
-    return `
-            <a href="#" class="card ${
-              active ? "card-active" : "card-inactive"
-            }">
-                <div class="card__title">${title}</div>
-                <div class="card__timestamp">${start} - ${end}</div>
-            </a>
-        `;
+  isCurrentTimeAfter(date) {
+    const currentTime = dayjs();
+    const startTimeObj = dayjs(date, "YYYY-MM-DD HH:mm");
+
+    return currentTime.isAfter(startTimeObj);
   }
 }

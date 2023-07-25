@@ -5,7 +5,6 @@
       class="date-picker"
       placeholder="Pick a date"
       v-model="selectedDate"
-      @change="dateChanged"
     />
   </span>
 </template>
@@ -22,9 +21,12 @@ export default {
   created() {
     this.selectedDate = dayjs().format("YYYY-MM-DD");
   },
-  methods: {
-    dateChanged() {
-      this.$emit("date-selected", this.selectedDate);
+  watch: {
+    selectedDate: {
+      immediate: true,
+      handler(selectedDate) {
+        this.$emit("date-selected", selectedDate);
+      },
     },
   },
 };

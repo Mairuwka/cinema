@@ -1,12 +1,12 @@
 <template>
-  <li class="card-container">
-    <a class="card" :class="[isActiveCard ? 'card-active' : 'card-inactive']">
-      <div class="card__title">{{ title }}</div>
-      <div class="card__timestamp">
+  <div class="session-item">
+    <a class="session-item__card" :class="[isActiveCard ? 'card-active' : '']">
+      <div class="session-item__title">{{ title }}</div>
+      <div class="session-item__timestamp">
         {{ sessionStartTime }} - {{ sessionEndTime }}
       </div>
     </a>
-  </li>
+  </div>
 </template>
 
 <script>
@@ -26,33 +26,29 @@ export default {
     },
     isActiveCard: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
 };
 </script>
 
 <style lang="scss">
-.card-container {
+.session-item {
   display: flex;
   justify-content: center;
   margin: 16px 0;
 
-  &:last-child {
-    margin-bottom: 0;
+  &__card {
+    display: block;
+    width: 200px;
+    height: 150px;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease;
   }
-}
-
-.card {
-  display: block;
-  width: 200px;
-  height: 150px;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  text-decoration: none;
-  transition: box-shadow 0.2s ease;
 
   &__title {
     font-size: 18px;
@@ -65,9 +61,13 @@ export default {
     color: #888;
   }
 
-  &-inactive {
-    background-color: #f9f9f9;
+  &:last-child {
+    margin-bottom: 0;
   }
+}
+
+.card {
+  background-color: #f9f9f9;
 
   &-active {
     background-color: #42b983;
