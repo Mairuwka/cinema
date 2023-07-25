@@ -74,4 +74,17 @@ export class SessionsService {
 
     return currentTime.isAfter(startTimeObj);
   }
+
+  transformSessionsForDisplay(sessionsForDay) {
+    return sessionsForDay.map((session) => {
+      const cardActive = !this.isCurrentTimeAfter(session.startTime);
+
+      return {
+        title: session.title,
+        sessionStartTime: dayjs(session.startTime).format("HH:mm"),
+        sessionEndTime: dayjs(session.endTime).format("HH:mm"),
+        isActiveCard: cardActive,
+      };
+    });
+  }
 }
