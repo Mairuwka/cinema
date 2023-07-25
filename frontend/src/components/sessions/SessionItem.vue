@@ -48,6 +48,7 @@ export default {
     text-align: center;
     text-decoration: none;
     transition: box-shadow 0.2s ease;
+    background-color: #f9f9f9;
   }
 
   &__title {
@@ -66,12 +67,8 @@ export default {
   }
 }
 
-.card {
-  background-color: #f9f9f9;
-
-  &-active {
-    background-color: #42b983;
-    color: #fff;
-  }
+.card-active {
+  background-color: #42b983;
+  color: #fff;
 }
 </style>
