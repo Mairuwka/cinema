@@ -1,0 +1,29 @@
+<template>
+  <div v-if="sessions.length">
+    <SessionItem
+      v-for="session in sessions"
+      :key="session.id"
+      :title="session.title"
+      :sessionStartTime="session.sessionStartTime"
+      :sessionEndTime="session.sessionEndTime"
+      :isActiveCard="session.isActiveCard"
+    />
+  </div>
+  <div v-else>Сессий на данный период нет</div>
+</template>
+
+<script>
+import SessionItem from "@/components/sessions/SessionItem.vue";
+
+export default {
+  props: {
+    sessions: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  components: {
+    SessionItem,
+  },
+};
+</script>

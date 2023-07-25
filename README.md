@@ -7,7 +7,7 @@
 - [JS](https://learn.javascript.ru/)
 - [Day.js](https://day.js.org/)
 - [SCSS](https://sass-lang.com/documentation/)
-- [Pug](https://pugjs.org/)
+- [Vue.js](https://ru.vuejs.org/index.html)
 
 ## Запуск проекта
 
@@ -21,7 +21,7 @@
 3. Перейдите в директорию проекта:
 
    ```
-   cd cinema
+   cd cinema/frontend/
 4. Установите зависимости:
 
    ```
