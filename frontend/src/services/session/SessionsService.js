@@ -1,21 +1,22 @@
 import { LocalStorage } from "@/helpers/LocalStorage";
-import { Session } from "./Session";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import { SessionGeneratorService } from "@/services/session/SessionGeneratorService";
 dayjs.extend(isBetween);
-import {
-  MAX_DURATION_SESSION,
-  MAX_COUNT_SHOW_SESSION,
-} from "@/components/sessions/constants/constants";
 
 export class SessionsService {
   constructor() {
     this.sessions = {};
-    this.amountSession = MAX_COUNT_SHOW_SESSION;
-    this.sessionDuration = MAX_DURATION_SESSION;
   }
   setSessions(date) {
-    if (this.isWithinRange(date)) this.createSessions(date);
+    if (this.isWithinRange(date)) {
+      const sessionGeneratorService = new SessionGeneratorService();
+      const daySessions = sessionGeneratorService.generateSessions(date);
+
+      const formattedDate = dayjs(date).format("YYYY-MM-DD");
+      LocalStorage.set(formattedDate, daySessions);
+      this.sessions[formattedDate] = daySessions;
+    }
   }
 
   getSessions(date) {
@@ -28,36 +29,6 @@ export class SessionsService {
     return (
       this.sessions[date] ?? LocalStorage.get(selectedDate.format("YYYY-MM-DD"))
     );
-  }
-
-  createSessions(date) {
-    const daySessions = this._generateSessions(date);
-
-    const formattedDate = date.format("YYYY-MM-DD");
-
-    LocalStorage.set(formattedDate, daySessions);
-    this.sessions[formattedDate] = daySessions;
-  }
-
-  _generateSessions(date) {
-    const minSessionStartTime = dayjs(date).set("hour", 10).set("minute", 0);
-
-    return Array.from({ length: this.amountSession }, (_, elem) => {
-      const sessionStartTime = minSessionStartTime.add(
-        elem * this.sessionDuration,
-        "hour"
-      );
-      const sessionEndTime = sessionStartTime.add(this.sessionDuration, "hour");
-
-      return new Session({
-        title: "Terminator",
-        date: date,
-        startTime: sessionStartTime,
-        endTime: sessionEndTime,
-        totalSeats: 50,
-        ticketsSold: 0,
-      });
-    });
   }
 
   isWithinRange(dateToCheck) {
