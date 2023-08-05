@@ -13,7 +13,7 @@ export class SessionsService {
   }
 
   getSessions(date) {
-    return this.sessions[date];
+    return this.sessions[date] ?? LocalStorage.get(date);
   }
 
   isWithinRange(dateToCheck) {
