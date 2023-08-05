@@ -24,16 +24,16 @@ export class SessionsService {
     return dateToCheck.isBetween(startDate, endDate, null, "[]");
   }
 
-  isCurrentTimeAfter(date) {
+  isSessionExpiredToBuyTickets(date) {
     const currentTime = dayjs();
     const startTimeObj = dayjs(date, "YYYY-MM-DD HH:mm");
 
-    return currentTime.isAfter(startTimeObj);
+    return currentTime.isBefore(startTimeObj);
   }
 
   transformSessionsForDisplay(sessionsForDay) {
     return sessionsForDay.map((session) => {
-      const cardActive = !this.isCurrentTimeAfter(session.startTime);
+      const cardActive = this.isSessionExpiredToBuyTickets(session.startTime);
 
       return {
         title: session.title,
