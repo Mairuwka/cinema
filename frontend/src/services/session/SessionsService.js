@@ -1,34 +1,19 @@
 import { LocalStorage } from "@/helpers/LocalStorage";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import { SessionGeneratorService } from "@/services/session/SessionGeneratorService";
 dayjs.extend(isBetween);
 
 export class SessionsService {
   constructor() {
     this.sessions = {};
   }
-  setSessions(date) {
-    if (this.isWithinRange(date)) {
-      const sessionGeneratorService = new SessionGeneratorService();
-      const daySessions = sessionGeneratorService.generateSessions(date);
-
-      const formattedDate = dayjs(date).format("YYYY-MM-DD");
-      LocalStorage.set(formattedDate, daySessions);
-      this.sessions[formattedDate] = daySessions;
-    }
+  setSessions(date, sessions) {
+    LocalStorage.set(date, sessions);
+    this.sessions[date] = sessions;
   }
 
   getSessions(date) {
-    let selectedDate = dayjs(date);
-
-    if (!LocalStorage.get(selectedDate.format("YYYY-MM-DD"))) {
-      this.setSessions(selectedDate);
-    }
-
-    return (
-      this.sessions[date] ?? LocalStorage.get(selectedDate.format("YYYY-MM-DD"))
-    );
+    return this.sessions[date] ?? LocalStorage.get(date);
   }
 
   isWithinRange(dateToCheck) {
