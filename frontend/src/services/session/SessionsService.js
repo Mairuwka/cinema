@@ -51,7 +51,7 @@ export class SessionsService {
     });
   }
 
-  generateSessionsForOneDay(date) {
+  generateSessionsForDate(date) {
     const minSessionStartTime = dayjs(date).set("hour", 10).set("minute", 0);
 
     return Array.from({ length: this.amountSession }, (_, elem) => {

@@ -34,7 +34,7 @@ export default {
         sessionsService.isWithinRange(fullDateFormat)
       ) {
         const daySessions =
-          sessionsService.generateSessionsForOneDay(selectedDate);
+          sessionsService.generateSessionsForDate(selectedDate);
 
         sessionsService.setSessions(selectedDate, daySessions);
       }

@@ -3,14 +3,27 @@ import { LocalStorage } from "@/helpers/LocalStorage";
 import dayjs from "dayjs";
 
 describe("SessionService", () => {
-  let sessionsService;
+  let sessionsService, daySessions;
   beforeEach(() => {
     sessionsService = new SessionsService();
+    daySessions = [
+      {
+        title: "Session 1",
+        startTime: dayjs().set("hour", 9).set("minute", 0),
+        endTime: dayjs().set("hour", 10).set("minute", 30),
+      },
+      {
+        title: "Session 2",
+        startTime: dayjs().set("hour", 11).set("minute", 0),
+        endTime: dayjs().set("hour", 12).set("minute", 30),
+      },
+    ];
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     sessionsService = null;
+    daySessions = null;
   });
 
   describe("Constructor", () => {
@@ -32,26 +45,6 @@ describe("SessionService", () => {
 
     it("should return data if available", () => {
       const date = dayjs().format("YYYY-MM-DD");
-      const daySessions = [
-        {
-          date: "2023-08-10",
-          endTime: "2023-08-10T14:00:00.000Z",
-          id: "2023-08-05T13:18:58.814Z",
-          startTime: "2023-08-10T12:00:00.000Z",
-          ticketsSold: 0,
-          title: "Terminator",
-          totalSeats: 50,
-        },
-        {
-          date: "2023-08-10",
-          endTime: "2023-08-10T10:00:00.000Z",
-          id: "2023-08-05T15:18:58.814Z",
-          startTime: "2023-08-10T12:00:00.000Z",
-          ticketsSold: 0,
-          title: "Terminator",
-          totalSeats: 50,
-        },
-      ];
       const setLocalStorageSpy = jest.spyOn(LocalStorage, "set");
 
       sessionsService.setSessions(date, daySessions);
@@ -66,26 +59,6 @@ describe("SessionService", () => {
   describe("Method setSessions", () => {
     it("should write data", () => {
       const date = dayjs().format("YYYY-MM-DD");
-      const daySessions = [
-        {
-          date: "2023-08-10",
-          endTime: "2023-08-10T14:00:00.000Z",
-          id: "2023-08-05T13:18:58.814Z",
-          startTime: "2023-08-10T12:00:00.000Z",
-          ticketsSold: 0,
-          title: "Terminator",
-          totalSeats: 50,
-        },
-        {
-          date: "2023-08-10",
-          endTime: "2023-08-10T10:00:00.000Z",
-          id: "2023-08-05T15:18:58.814Z",
-          startTime: "2023-08-10T12:00:00.000Z",
-          ticketsSold: 0,
-          title: "Terminator",
-          totalSeats: 50,
-        },
-      ];
       const setLocalStorageSpy = jest.spyOn(LocalStorage, "set");
 
       sessionsService.setSessions(date, daySessions);
@@ -133,24 +106,11 @@ describe("SessionService", () => {
 
   describe("Method transformSessionsForDisplay", () => {
     it("transforms sessions correctly", () => {
-      const sessionsForDay = [
-        {
-          title: "Session 1",
-          startTime: dayjs().set("hour", 9).set("minute", 0),
-          endTime: dayjs().set("hour", 10).set("minute", 30),
-        },
-        {
-          title: "Session 2",
-          startTime: dayjs().set("hour", 11).set("minute", 0),
-          endTime: dayjs().set("hour", 12).set("minute", 30),
-        },
-      ];
       sessionsService.isSessionExpiredToBuyTicketsMock = jest
         .fn()
         .mockImplementationOnce(() => false);
 
-      const sessions =
-        sessionsService.transformSessionsForDisplay(sessionsForDay);
+      const sessions = sessionsService.transformSessionsForDisplay(daySessions);
 
       expect(sessions).toStrictEqual([
         {
