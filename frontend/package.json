@@ -7,7 +7,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "jest --no-cache"
   },
   "main": "../webpack.config.js",
   "dependencies": {
@@ -18,20 +19,25 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.22.9",
+    "@types/jest": "^29.5.3",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "babel-jest": "^29.6.2",
     "dayjs": "^1.11.8",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "jest": "^29.6.1"
   },
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "jest": true
     },
     "extends": [
       "plugin:vue/essential",

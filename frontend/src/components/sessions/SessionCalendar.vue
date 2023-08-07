@@ -15,11 +15,8 @@ import dayjs from "dayjs";
 export default {
   data() {
     return {
-      selectedDate: null,
+      selectedDate: dayjs().format("YYYY-MM-DD"),
     };
-  },
-  created() {
-    this.selectedDate = dayjs().format("YYYY-MM-DD");
   },
   watch: {
     selectedDate: {

@@ -9,6 +9,8 @@
 import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
 import { SessionsService } from "@/services/session/SessionsService";
+import dayjs from "dayjs";
+
 const sessionsService = new SessionsService();
 
 export default {
@@ -23,18 +25,26 @@ export default {
     };
   },
   watch: {
-    selectedDate: {
-      immediate: true,
-      handler(selectedDate) {
-        this.sessions = [];
+    selectedDate(selectedDate) {
+      this.sessions = [];
+      let fullDateFormat = dayjs(selectedDate);
 
-        const sessionsForDay = sessionsService.getSessions(selectedDate);
+      if (
+        !sessionsService.getSessions(selectedDate) &&
+        sessionsService.isWithinRange(fullDateFormat)
+      ) {
+        const daySessions =
+          sessionsService.generateSessionsForDate(selectedDate);
 
-        if (!sessionsForDay) return;
+        sessionsService.setSessions(selectedDate, daySessions);
+      }
 
-        this.sessions =
-          sessionsService.transformSessionsForDisplay(sessionsForDay);
-      },
+      const sessionsForDay = sessionsService.getSessions(selectedDate);
+
+      if (!sessionsForDay) return;
+
+      this.sessions =
+        sessionsService.transformSessionsForDisplay(sessionsForDay);
     },
   },
   methods: {
