@@ -1,7 +1,6 @@
 import { SessionsService } from "@/services/session/SessionsService";
 import { LocalStorage } from "@/helpers/LocalStorage";
 import dayjs from "dayjs";
-import { SessionGeneratorService } from "@/services/session/SessionGeneratorService";
 
 describe("SessionService", () => {
   let sessionsService;
@@ -15,13 +14,13 @@ describe("SessionService", () => {
   });
 
   describe("Constructor", () => {
-    it("Checking for instance", () => {
+    it("checking for instance", () => {
       expect(sessionsService).toBeInstanceOf(SessionsService);
     });
   });
 
-  describe("getSessions method", () => {
-    it("Should return null if there is no data", () => {
+  describe("Method getSessions", () => {
+    it("should return null if there is no data", () => {
       const date = dayjs().format("YYYY-MM-DD");
       const getLocalStorageSpy = jest.spyOn(LocalStorage, "get");
 
@@ -31,10 +30,28 @@ describe("SessionService", () => {
       expect(result).toBeNull();
     });
 
-    it("Should return data if available", () => {
+    it("should return data if available", () => {
       const date = dayjs().format("YYYY-MM-DD");
-      const sessionGeneratorService = new SessionGeneratorService();
-      const daySessions = sessionGeneratorService.generateSessions(date);
+      const daySessions = [
+        {
+          date: "2023-08-10",
+          endTime: "2023-08-10T14:00:00.000Z",
+          id: "2023-08-05T13:18:58.814Z",
+          startTime: "2023-08-10T12:00:00.000Z",
+          ticketsSold: 0,
+          title: "Terminator",
+          totalSeats: 50,
+        },
+        {
+          date: "2023-08-10",
+          endTime: "2023-08-10T10:00:00.000Z",
+          id: "2023-08-05T15:18:58.814Z",
+          startTime: "2023-08-10T12:00:00.000Z",
+          ticketsSold: 0,
+          title: "Terminator",
+          totalSeats: 50,
+        },
+      ];
       const setLocalStorageSpy = jest.spyOn(LocalStorage, "set");
 
       sessionsService.setSessions(date, daySessions);
@@ -46,11 +63,29 @@ describe("SessionService", () => {
     });
   });
 
-  describe("setSessions method", () => {
-    it("Should write data", () => {
+  describe("Method setSessions", () => {
+    it("should write data", () => {
       const date = dayjs().format("YYYY-MM-DD");
-      const sessionGeneratorService = new SessionGeneratorService();
-      const daySessions = sessionGeneratorService.generateSessions(date);
+      const daySessions = [
+        {
+          date: "2023-08-10",
+          endTime: "2023-08-10T14:00:00.000Z",
+          id: "2023-08-05T13:18:58.814Z",
+          startTime: "2023-08-10T12:00:00.000Z",
+          ticketsSold: 0,
+          title: "Terminator",
+          totalSeats: 50,
+        },
+        {
+          date: "2023-08-10",
+          endTime: "2023-08-10T10:00:00.000Z",
+          id: "2023-08-05T15:18:58.814Z",
+          startTime: "2023-08-10T12:00:00.000Z",
+          ticketsSold: 0,
+          title: "Terminator",
+          totalSeats: 50,
+        },
+      ];
       const setLocalStorageSpy = jest.spyOn(LocalStorage, "set");
 
       sessionsService.setSessions(date, daySessions);
@@ -60,8 +95,8 @@ describe("SessionService", () => {
     });
   });
 
-  describe("isWithinRange method", () => {
-    it("Should return false if date is not in range", () => {
+  describe("Method isWithinRange", () => {
+    it("should return false if date is not in range", () => {
       const date = dayjs().startOf("day").add(8, "day");
 
       const result = sessionsService.isWithinRange(date);
@@ -69,7 +104,7 @@ describe("SessionService", () => {
       expect(result).toBeFalsy();
     });
 
-    it("Should return true if date is in range", () => {
+    it("should return true if date is in range", () => {
       const date = dayjs();
 
       const result = sessionsService.isWithinRange(date);
@@ -78,8 +113,8 @@ describe("SessionService", () => {
     });
   });
 
-  describe("isSessionExpiredToBuyTickets method", () => {
-    it("Should return true if the time has not yet expired", () => {
+  describe("Method isSessionExpiredToBuyTickets", () => {
+    it("should return true if the time has not yet expired", () => {
       const date = dayjs().startOf("day").add(1, "day");
 
       const result = sessionsService.isSessionExpiredToBuyTickets(date);
@@ -87,7 +122,7 @@ describe("SessionService", () => {
       expect(result).toBeTruthy();
     });
 
-    it("Should return false if the time has expired", () => {
+    it("should return false if the time has expired", () => {
       const date = dayjs().startOf("day").subtract(1, "day");
 
       const result = sessionsService.isSessionExpiredToBuyTickets(date);
@@ -96,7 +131,7 @@ describe("SessionService", () => {
     });
   });
 
-  describe("transformSessionsForDisplay method", () => {
+  describe("Method transformSessionsForDisplay", () => {
     it("transforms sessions correctly", () => {
       const sessionsForDay = [
         {

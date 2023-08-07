@@ -9,7 +9,6 @@
 import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
 import { SessionsService } from "@/services/session/SessionsService";
-import { SessionGeneratorService } from "@/services/session/SessionGeneratorService";
 import dayjs from "dayjs";
 
 const sessionsService = new SessionsService();
@@ -34,9 +33,8 @@ export default {
         !sessionsService.getSessions(selectedDate) &&
         sessionsService.isWithinRange(fullDateFormat)
       ) {
-        const sessionGeneratorService = new SessionGeneratorService();
         const daySessions =
-          sessionGeneratorService.generateSessions(selectedDate);
+          sessionsService.generateSessionsForOneDay(selectedDate);
 
         sessionsService.setSessions(selectedDate, daySessions);
       }
