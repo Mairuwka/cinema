@@ -12,6 +12,7 @@
   },
   "main": "../webpack.config.js",
   "dependencies": {
+    "firebase": "^10.1.0",
     "node-sass": "^9.0.0",
     "sass-loader": "^13.3.2",
     "vue": "^2.6.14",

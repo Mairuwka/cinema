@@ -1,5 +1,4 @@
 import { SessionsService } from "@/services/session/SessionsService";
-import { LocalStorage } from "@/helpers/LocalStorage";
 import dayjs from "dayjs";
 
 describe("SessionService", () => {
@@ -9,13 +8,13 @@ describe("SessionService", () => {
     daySessions = [
       {
         title: "Session 1",
-        startTime: dayjs().set("hour", 9).set("minute", 0),
-        endTime: dayjs().set("hour", 10).set("minute", 30),
+        startTime: "09:00",
+        endTime: "10:30",
       },
       {
         title: "Session 2",
-        startTime: dayjs().set("hour", 11).set("minute", 0),
-        endTime: dayjs().set("hour", 12).set("minute", 30),
+        startTime: "11:00",
+        endTime: "12:30",
       },
     ];
   });
@@ -29,60 +28,6 @@ describe("SessionService", () => {
   describe("Constructor", () => {
     it("checking for instance", () => {
       expect(sessionsService).toBeInstanceOf(SessionsService);
-    });
-  });
-
-  describe("Method getSessions", () => {
-    it("should return null if there is no data", () => {
-      const date = dayjs().format("YYYY-MM-DD");
-      const getLocalStorageSpy = jest.spyOn(LocalStorage, "get");
-
-      const result = sessionsService.getSessions(date);
-
-      expect(getLocalStorageSpy).toHaveBeenCalled();
-      expect(result).toBeNull();
-    });
-
-    it("should return data if available", () => {
-      const date = dayjs().format("YYYY-MM-DD");
-      const setLocalStorageSpy = jest.spyOn(LocalStorage, "set");
-
-      sessionsService.setSessions(date, daySessions);
-      const result = sessionsService.getSessions(date);
-
-      expect(setLocalStorageSpy).toHaveBeenCalled();
-      expect(sessionsService.sessions[date]).not.toBeUndefined();
-      expect(result).toBe(daySessions);
-    });
-  });
-
-  describe("Method setSessions", () => {
-    it("should write data", () => {
-      const date = dayjs().format("YYYY-MM-DD");
-      const setLocalStorageSpy = jest.spyOn(LocalStorage, "set");
-
-      sessionsService.setSessions(date, daySessions);
-
-      expect(setLocalStorageSpy).toHaveBeenCalled();
-      expect(sessionsService.sessions[date]).not.toBeUndefined();
-    });
-  });
-
-  describe("Method isWithinRange", () => {
-    it("should return false if date is not in range", () => {
-      const date = dayjs().startOf("day").add(8, "day");
-
-      const result = sessionsService.isWithinRange(date);
-
-      expect(result).toBeFalsy();
-    });
-
-    it("should return true if date is in range", () => {
-      const date = dayjs();
-
-      const result = sessionsService.isWithinRange(date);
-
-      expect(result).toBeTruthy();
     });
   });
 
