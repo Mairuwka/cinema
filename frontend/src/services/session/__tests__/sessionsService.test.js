@@ -8,13 +8,13 @@ describe("SessionService", () => {
     daySessions = [
       {
         title: "Session 1",
-        startTime: "09:00",
-        endTime: "10:30",
+        startTime: dayjs().hour(9).minute(0),
+        endTime: dayjs().hour(11).minute(0),
       },
       {
         title: "Session 2",
-        startTime: "11:00",
-        endTime: "12:30",
+        startTime: dayjs().hour(11).minute(0),
+        endTime: dayjs().hour(13).minute(0),
       },
     ];
   });
@@ -51,9 +51,9 @@ describe("SessionService", () => {
 
   describe("Method transformSessionsForDisplay", () => {
     it("transforms sessions correctly", () => {
-      sessionsService.isSessionExpiredToBuyTicketsMock = jest
+      sessionsService.isSessionExpiredToBuyTickets = jest
         .fn()
-        .mockImplementationOnce(() => false);
+        .mockImplementation(() => false);
 
       const sessions = sessionsService.transformSessionsForDisplay(daySessions);
 
@@ -61,13 +61,13 @@ describe("SessionService", () => {
         {
           title: "Session 1",
           sessionStartTime: "09:00",
-          sessionEndTime: "10:30",
+          sessionEndTime: "11:00",
           isActiveCard: false,
         },
         {
           title: "Session 2",
           sessionStartTime: "11:00",
-          sessionEndTime: "12:30",
+          sessionEndTime: "13:00",
           isActiveCard: false,
         },
       ]);

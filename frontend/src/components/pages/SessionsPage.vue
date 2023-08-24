@@ -10,17 +10,9 @@ import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
 import { SessionsService } from "@/services/session/SessionsService";
 import { Session } from "@/services/session/Session";
-
-import { FirebaseController } from "../../../../backend/modules/firebase/api/FirebaseController";
-import { firebeseConfig } from "../../../../backend/modules/firebase/config/firebase-config";
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, child } from "firebase/database";
-
-const firebase = initializeApp(firebeseConfig);
-const database = getDatabase(firebase);
+import { sessionsController } from "../../../../backend/src/index";
 
 const sessionsService = new SessionsService();
-const firebaseController = new FirebaseController(firebase, database);
 
 export default {
   components: {
@@ -37,11 +29,10 @@ export default {
     async selectedDate(selectedDate) {
       this.sessions = [];
 
-      const sessionsRef = child(ref(database, "sessions"), selectedDate);
       let sessionsForDay = [];
 
       try {
-        const snapshot = await firebaseController.getSessions(sessionsRef);
+        const snapshot = await sessionsController.get(selectedDate);
 
         if (snapshot.exists()) {
           sessionsForDay = snapshot.val();
@@ -54,7 +45,6 @@ export default {
         console.log(error);
       }
 
-      console.log(sessionsForDay);
       if (!sessionsForDay) return;
 
       this.sessions =

@@ -16,8 +16,8 @@ export class SessionsService {
 
       return {
         title: session.title,
-        sessionStartTime: session.startTime,
-        sessionEndTime: session.endTime,
+        sessionStartTime: dayjs(session.startTime).format("HH:mm"),
+        sessionEndTime: dayjs(session.endTime).format("HH:mm"),
         isActiveCard: cardActive,
       };
     });
