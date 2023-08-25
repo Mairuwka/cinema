@@ -1,7 +1,7 @@
 import { SessionsController } from "./modules/sessions/controllers/SessionsController";
 import { firebeseConfig } from "./modules/firebase/config/firebase-config";
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, child } from "firebase/database";
 
 const firebase = initializeApp(firebeseConfig);
 const database = getDatabase(firebase);

@@ -9,8 +9,6 @@
 import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
 import { SessionsService } from "@/services/session/SessionsService";
-import { Session } from "@/services/session/Session";
-import { sessionsController } from "../../../../backend/src/index";
 
 const sessionsService = new SessionsService();
 
@@ -29,26 +27,21 @@ export default {
     async selectedDate(selectedDate) {
       this.sessions = [];
 
-      let sessionsForDay = [];
+      const sessionsForDay = await sessionsService.get(selectedDate);
 
-      try {
-        const snapshot = await sessionsController.get(selectedDate);
-
-        if (snapshot.exists()) {
-          sessionsForDay = snapshot.val();
-
-          sessionsForDay = sessionsForDay.map(
-            (session) => new Session(session)
-          );
-        }
-      } catch (error) {
-        console.log(error);
+      if (!sessionsForDay.success) {
+        console.log(sessionsForDay.error);
+        return;
+        // TODO дальнейшая реализация показа ошибки
       }
 
-      if (!sessionsForDay) return;
+      if (sessionsForDay.success && !sessionsForDay.data) {
+        return;
+      }
 
-      this.sessions =
-        sessionsService.transformSessionsForDisplay(sessionsForDay);
+      this.sessions = sessionsService.transformSessionsForDisplay(
+        sessionsForDay.data
+      );
     },
   },
   methods: {

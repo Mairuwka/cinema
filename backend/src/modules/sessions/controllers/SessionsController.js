@@ -7,8 +7,8 @@ import {
 } from "firebase/database";
 
 export class SessionsController extends FirebaseController {
-  get(selectedDate) {
-    const ref = firebaseChild(firebaseRef(this.database, "sessions"), selectedDate);
+  get(date) {
+    const ref = firebaseChild(firebaseRef(this.database, "sessions"), date);
 
     return firebaseGet(ref);
   }

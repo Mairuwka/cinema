@@ -1,17 +1,14 @@
 import { sessionsController } from "../../../index";
 import { get, set, ref } from 'firebase/database';
-import { SessionsController } from "../controllers/SessionsController";
 import dayjs from "dayjs";
 
 jest.mock('firebase/database');
 
 describe('SessionsController', () => {
-
   describe('get Method', () => {
     it('get returns data from Firebase', async () => {
       const selectedDate = dayjs().format();
       const mockData = {};
-
       get.mockReturnValue(Promise.resolve(mockData));
 
       const result = await sessionsController.get(selectedDate);
@@ -26,8 +23,10 @@ describe('SessionsController', () => {
       const setSpy = jest.spyOn(sessionsController, 'set');
       set.mockReturnValue(Promise.resolve());
 
-      await expect(sessionsController.set(mockData)).resolves;
+      await sessionsController.set(mockData);
+
       expect(setSpy).toHaveBeenCalled();
+      expect(setSpy).toHaveBeenCalledWith(mockData);
     });
   });
 });

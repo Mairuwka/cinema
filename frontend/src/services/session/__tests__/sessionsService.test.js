@@ -1,5 +1,6 @@
 import { SessionsService } from "@/services/session/SessionsService";
 import dayjs from "dayjs";
+import { sessionsController } from "../../../../../backend/src/index";
 
 describe("SessionService", () => {
   let sessionsService, daySessions;
@@ -28,6 +29,22 @@ describe("SessionService", () => {
   describe("Constructor", () => {
     it("checking for instance", () => {
       expect(sessionsService).toBeInstanceOf(SessionsService);
+    });
+  });
+
+  describe("Method get", () => {
+    it("should return array if current day", async () => {
+      const date = dayjs().startOf("day").add(1, "day").format("YYYY-MM-DD");
+      sessionsController.get = jest.fn().mockResolvedValue({
+        exists: jest.fn().mockImplementation(() => true),
+        val: jest.fn().mockImplementation(() => daySessions),
+      });
+      const getSessionsServiceSpyOn = jest.spyOn(sessionsController, "get");
+
+      const sessions = await sessionsService.get(date);
+
+      expect(getSessionsServiceSpyOn).toHaveBeenCalled();
+      expect(sessions).toBe(daySessions);
     });
   });
 
