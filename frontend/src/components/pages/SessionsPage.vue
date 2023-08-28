@@ -9,8 +9,11 @@
 import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
 import { SessionsService } from "@/services/session/SessionsService";
+import { sessionsController } from "../../../../backend/src/index";
 
-const sessionsService = new SessionsService();
+const sessionsService = new SessionsService({
+  sessionsController,
+});
 
 export default {
   components: {

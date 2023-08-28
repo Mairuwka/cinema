@@ -1,29 +1,40 @@
 import { SessionsService } from "@/services/session/SessionsService";
 import dayjs from "dayjs";
-import { sessionsController } from "../../../../../backend/src/index";
+import { Session } from "@/services/session/Session";
 
 describe("SessionService", () => {
-  let sessionsService, daySessions;
+  let sessionsService, daySessions, sessionsController;
   beforeEach(() => {
-    sessionsService = new SessionsService();
     daySessions = [
-      {
+      new Session({
         title: "Session 1",
         startTime: dayjs().hour(9).minute(0),
         endTime: dayjs().hour(11).minute(0),
-      },
-      {
+      }),
+      new Session({
         title: "Session 2",
         startTime: dayjs().hour(11).minute(0),
         endTime: dayjs().hour(13).minute(0),
-      },
+      }),
     ];
+
+    sessionsController = {
+      get: jest.fn().mockReturnValue({
+        exists: jest.fn().mockReturnValue(true),
+        val: jest.fn().mockImplementation(() => daySessions),
+      }),
+    };
+
+    sessionsService = new SessionsService({
+      sessionsController,
+    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     sessionsService = null;
     daySessions = null;
+    sessionsController = null;
   });
 
   describe("Constructor", () => {
@@ -35,16 +46,15 @@ describe("SessionService", () => {
   describe("Method get", () => {
     it("should return array if current day", async () => {
       const date = dayjs().startOf("day").add(1, "day").format("YYYY-MM-DD");
-      sessionsController.get = jest.fn().mockResolvedValue({
-        exists: jest.fn().mockImplementation(() => true),
-        val: jest.fn().mockImplementation(() => daySessions),
-      });
       const getSessionsServiceSpyOn = jest.spyOn(sessionsController, "get");
 
       const sessions = await sessionsService.get(date);
 
       expect(getSessionsServiceSpyOn).toHaveBeenCalled();
-      expect(sessions).toBe(daySessions);
+      expect(sessions).toStrictEqual({
+        data: daySessions,
+        success: true,
+      });
     });
   });
 

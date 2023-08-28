@@ -1,10 +1,12 @@
-import { sessionsController } from "../../../../backend/src/index";
 import { Session } from "@/services/session/Session";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 
 export class SessionsService {
+  constructor(options) {
+    Object.assign(this, options);
+  }
   async get(date) {
     let result = {
       success: true,
@@ -12,7 +14,7 @@ export class SessionsService {
     };
 
     try {
-      const snapshot = await sessionsController.get(date);
+      const snapshot = await this.sessionsController.get(date);
 
       if (snapshot.exists()) {
         const sessions = snapshot.val();
