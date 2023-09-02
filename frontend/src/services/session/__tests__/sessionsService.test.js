@@ -2,8 +2,13 @@ import { SessionsService } from "@/services/session/SessionsService";
 import dayjs from "dayjs";
 import { Session } from "@/services/session/Session";
 
+function sessionsServiceFactory(controllerMock) {
+  return new SessionsService(controllerMock);
+}
+
 describe("SessionService", () => {
-  let sessionsService, daySessions, sessionsController;
+  let daySessions;
+
   beforeEach(() => {
     daySessions = [
       new Session({
@@ -17,28 +22,23 @@ describe("SessionService", () => {
         endTime: dayjs().hour(13).minute(0),
       }),
     ];
-
-    sessionsController = {
-      get: jest.fn().mockReturnValue({
-        exists: jest.fn().mockReturnValue(true),
-        val: jest.fn().mockImplementation(() => daySessions),
-      }),
-    };
-
-    sessionsService = new SessionsService({
-      sessionsController,
-    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
-    sessionsService = null;
     daySessions = null;
-    sessionsController = null;
   });
 
   describe("Constructor", () => {
     it("checking for instance", () => {
+      const sessionsControllerMock = {
+        getSessions: jest.fn().mockReturnValue({
+          exists: jest.fn().mockReturnValue(true),
+          val: jest.fn().mockImplementation(() => daySessions),
+        }),
+      };
+      const sessionsService = sessionsServiceFactory(sessionsControllerMock);
+
       expect(sessionsService).toBeInstanceOf(SessionsService);
     });
   });
@@ -46,21 +46,35 @@ describe("SessionService", () => {
   describe("Method get", () => {
     it("should return array if current day", async () => {
       const date = dayjs().startOf("day").add(1, "day").format("YYYY-MM-DD");
-      const getSessionsServiceSpyOn = jest.spyOn(sessionsController, "get");
+      const sessionsControllerMock = {
+        getSessions: jest.fn().mockReturnValue({
+          exists: jest.fn().mockReturnValue(true),
+          val: jest.fn().mockImplementation(() => daySessions),
+        }),
+      };
+      const sessionsService = sessionsServiceFactory(sessionsControllerMock);
+      const getSessionsServiceSpyOn = jest.spyOn(
+        sessionsControllerMock,
+        "getSessions"
+      );
 
-      const sessions = await sessionsService.get(date);
+      const sessions = await sessionsService.getSessions(date);
 
       expect(getSessionsServiceSpyOn).toHaveBeenCalled();
-      expect(sessions).toStrictEqual({
-        data: daySessions,
-        success: true,
-      });
+      expect(sessions).toStrictEqual(daySessions);
     });
   });
 
   describe("Method isSessionExpiredToBuyTickets", () => {
     it("should return true if the time has not yet expired", () => {
       const date = dayjs().startOf("day").add(1, "day");
+      const sessionsControllerMock = {
+        getSessions: jest.fn().mockReturnValue({
+          exists: jest.fn().mockReturnValue(true),
+          val: jest.fn().mockImplementation(() => daySessions),
+        }),
+      };
+      const sessionsService = sessionsServiceFactory(sessionsControllerMock);
 
       const result = sessionsService.isSessionExpiredToBuyTickets(date);
 
@@ -69,6 +83,13 @@ describe("SessionService", () => {
 
     it("should return false if the time has expired", () => {
       const date = dayjs().startOf("day").subtract(1, "day");
+      const sessionsControllerMock = {
+        getSessions: jest.fn().mockReturnValue({
+          exists: jest.fn().mockReturnValue(true),
+          val: jest.fn().mockImplementation(() => daySessions),
+        }),
+      };
+      const sessionsService = sessionsServiceFactory(sessionsControllerMock);
 
       const result = sessionsService.isSessionExpiredToBuyTickets(date);
 
@@ -78,6 +99,13 @@ describe("SessionService", () => {
 
   describe("Method transformSessionsForDisplay", () => {
     it("transforms sessions correctly", () => {
+      const sessionsControllerMock = {
+        getSessions: jest.fn().mockReturnValue({
+          exists: jest.fn().mockReturnValue(true),
+          val: jest.fn().mockImplementation(() => daySessions),
+        }),
+      };
+      const sessionsService = sessionsServiceFactory(sessionsControllerMock);
       sessionsService.isSessionExpiredToBuyTickets = jest
         .fn()
         .mockImplementation(() => false);

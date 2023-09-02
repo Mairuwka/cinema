@@ -11,9 +11,7 @@ import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
 import { SessionsService } from "@/services/session/SessionsService";
 import { sessionsController } from "../../../../backend/src/index";
 
-const sessionsService = new SessionsService({
-  sessionsController,
-});
+const sessionsService = new SessionsService(sessionsController);
 
 export default {
   components: {
@@ -29,22 +27,22 @@ export default {
   watch: {
     async selectedDate(selectedDate) {
       this.sessions = [];
+      let sessionsForDay = [];
 
-      const sessionsForDay = await sessionsService.get(selectedDate);
-
-      if (!sessionsForDay.success) {
-        console.log(sessionsForDay.error);
+      try {
+        sessionsForDay = await sessionsService.getSessions(selectedDate);
+      } catch (e) {
+        console.log(e);
         return;
         // TODO дальнейшая реализация показа ошибки
       }
 
-      if (sessionsForDay.success && !sessionsForDay.data) {
+      if (!sessionsForDay) {
         return;
       }
 
-      this.sessions = sessionsService.transformSessionsForDisplay(
-        sessionsForDay.data
-      );
+      this.sessions =
+        sessionsService.transformSessionsForDisplay(sessionsForDay);
     },
   },
   methods: {

@@ -4,29 +4,21 @@ import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 
 export class SessionsService {
-  constructor(options) {
-    Object.assign(this, options);
+  constructor(controller) {
+    this.controller = controller;
   }
-  async get(date) {
-    let result = {
-      success: true,
-      data: [],
-    };
 
+  async getSessions(date) {
     try {
-      const snapshot = await this.sessionsController.get(date);
+      const snapshot = await this.controller.getSessions(date);
 
       if (snapshot.exists()) {
         const sessions = snapshot.val();
-
-        result.data = sessions.map((session) => new Session(session));
+        return sessions.map((session) => new Session(session));
       }
     } catch (error) {
-      result.success = false;
-      result.error = error;
+      throw "Ошибка при получении сессий: " + error;
     }
-
-    return result;
   }
 
   isSessionExpiredToBuyTickets(date) {

@@ -11,7 +11,7 @@ describe('SessionsController', () => {
       const mockData = {};
       get.mockReturnValue(Promise.resolve(mockData));
 
-      const result = await sessionsController.get(selectedDate);
+      const result = await sessionsController.getSessions(selectedDate);
 
       expect(result).toEqual(mockData);
     });
@@ -23,7 +23,7 @@ describe('SessionsController', () => {
       const setSpy = jest.spyOn(sessionsController, 'set');
       set.mockReturnValue(Promise.resolve());
 
-      await sessionsController.set(mockData);
+      await sessionsController.setSessions(mockData);
 
       expect(setSpy).toHaveBeenCalled();
       expect(setSpy).toHaveBeenCalledWith(mockData);

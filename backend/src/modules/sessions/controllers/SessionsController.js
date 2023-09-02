@@ -7,13 +7,13 @@ import {
 } from "firebase/database";
 
 export class SessionsController extends FirebaseController {
-  get(date) {
+  getSessions(date) {
     const ref = firebaseChild(firebaseRef(this.database, "sessions"), date);
 
     return firebaseGet(ref);
   }
 
-  set(data) {
+  setSessions(data) {
     const ref = firebaseRef(this.database, "sessions");
 
     return firebaseSet(ref, data);
