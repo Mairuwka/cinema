@@ -1,6 +1,6 @@
 export class Session {
   constructor(session) {
-    this.id = new Date();
+    this.id = session.id;
     this.title = session.title;
     this.date = session.date;
     this.startTime = session.startTime;

@@ -9,9 +9,9 @@
 import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
 import { SessionsService } from "@/services/session/SessionsService";
-import dayjs from "dayjs";
+import { sessionsController } from "../../../../backend/src/index";
 
-const sessionsService = new SessionsService();
+const sessionsService = new SessionsService(sessionsController);
 
 export default {
   components: {
@@ -25,23 +25,21 @@ export default {
     };
   },
   watch: {
-    selectedDate(selectedDate) {
+    async selectedDate(selectedDate) {
       this.sessions = [];
-      let fullDateFormat = dayjs(selectedDate);
+      let sessionsForDay = [];
 
-      if (
-        !sessionsService.getSessions(selectedDate) &&
-        sessionsService.isWithinRange(fullDateFormat)
-      ) {
-        const daySessions =
-          sessionsService.generateSessionsForDate(selectedDate);
-
-        sessionsService.setSessions(selectedDate, daySessions);
+      try {
+        sessionsForDay = await sessionsService.getSessions(selectedDate);
+      } catch (e) {
+        console.log(e);
+        return;
+        // TODO дальнейшая реализация показа ошибки
       }
 
-      const sessionsForDay = sessionsService.getSessions(selectedDate);
-
-      if (!sessionsForDay) return;
+      if (!sessionsForDay) {
+        return;
+      }
 
       this.sessions =
         sessionsService.transformSessionsForDisplay(sessionsForDay);
