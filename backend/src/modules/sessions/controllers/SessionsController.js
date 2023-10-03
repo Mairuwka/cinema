@@ -1,9 +1,9 @@
-import {FirebaseController} from "../../firebase/controllers/FirebaseController";
+import { FirebaseController } from "../../firebase/controllers/FirebaseController";
 import {
   child as firebaseChild,
   get as firebaseGet,
   set as firebaseSet,
-  ref as firebaseRef
+  ref as firebaseRef,
 } from "firebase/database";
 
 export class SessionsController extends FirebaseController {

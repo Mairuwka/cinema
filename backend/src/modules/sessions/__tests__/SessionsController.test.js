@@ -1,14 +1,24 @@
 import { sessionsController } from "../../../index";
-import { get, set, ref } from 'firebase/database';
-import dayjs from "dayjs";
+import { get, set } from "firebase/database";
 
-jest.mock('firebase/database');
+jest.mock("firebase/database");
 
-describe('SessionsController', () => {
-  describe('get Method', () => {
-    it('get returns data from Firebase', async () => {
-      const selectedDate = dayjs().format();
-      const mockData = {};
+describe("SessionsController", () => {
+  describe("get Method", () => {
+    it("Проверка на возврат данных из Firebase", async () => {
+      const selectedDate = "2023-10-03";
+      const mockData = {
+        "2023-10-03": [
+          {
+            date: "2023-08-24",
+            endTime: "2023-08-24 12:00",
+            startTime: "2023-08-24 10:00",
+            ticketsSold: 0,
+            title: "Terminator",
+            totalSeats: 50
+          }
+        ]
+      };
       get.mockReturnValue(Promise.resolve(mockData));
 
       const result = await sessionsController.getSessions(selectedDate);
@@ -17,10 +27,21 @@ describe('SessionsController', () => {
     });
   });
 
-  describe('set Method', () => {
-    it('set correctly updates data in Firebase', async () => {
-      const mockData = {};
-      const setSpy = jest.spyOn(sessionsController, 'set');
+  describe("set Method", () => {
+    it("Проверка на корректную установку данных Firebase", async () => {
+      const mockData = {
+        "2023-10-03": [
+          {
+            date: "2023-08-24",
+            endTime: "2023-08-24 12:00",
+            startTime: "2023-08-24 10:00",
+            ticketsSold: 0,
+            title: "Terminator",
+            totalSeats: 50
+          }
+        ]
+      };
+      const setSpy = jest.spyOn(sessionsController, "setSessions");
       set.mockReturnValue(Promise.resolve());
 
       await sessionsController.setSessions(mockData);
