@@ -8,11 +8,12 @@ export class SessionsService {
     this.api = api;
   }
 
-  async getSessions(date) {
+  async getSessionsOfDay(date) {
     let sessions = [];
+
     // eslint-disable-next-line no-useless-catch
     try {
-      const snapshot = await this.api.getSessions(date);
+      const snapshot = await this.api.getSessionsOfDay(date);
 
       if (snapshot.exists() && this.isWithinRange(dayjs(date))) {
         sessions = snapshot.val();
@@ -20,7 +21,7 @@ export class SessionsService {
         throw new Error("Сессии отсутствуют");
       }
     } catch (error) {
-      throw error;
+      throw error.message || "Что-то пошло не так, повторите попытку позже";
     }
 
     return this.transformSessionsForDisplay(

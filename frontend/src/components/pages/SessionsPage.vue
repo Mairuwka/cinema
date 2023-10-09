@@ -1,51 +1,42 @@
 <template>
   <div>
-    <SessionCalendar @date-selected="onDateSelected" />
+    <SessionCalendar @date-selected="setSessionsOfDay($event)" />
     <SessionsList :sessions="sessions" />
-    <ErrorPopup v-if="error" :error-message="error" @close-popup="clearError" />
   </div>
 </template>
 
 <script>
 import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
-import ErrorPopup from "@/components/popup/ErrorPopup.vue";
 import { SessionsService } from "@/services/session/SessionsService";
 import { sessionsController } from "../../../../backend/src/index";
 import { SessionsApi } from "@/api/sessions/SessionsApi";
 
 const sessionsApi = new SessionsApi(sessionsController);
-const sessionsService = new SessionsService(sessionsApi.controller);
+const sessionsService = new SessionsService(sessionsApi);
 
 export default {
   components: {
     SessionsList,
     SessionCalendar,
-    ErrorPopup,
   },
   data() {
     return {
       sessions: [],
-      error: "",
     };
   },
   methods: {
-    onDateSelected(date) {
-      this.setSessions(date);
-    },
-    async setSessions(selectedDate) {
+    async setSessionsOfDay(selectedDate) {
       this.sessions = [];
-      this.error = "";
 
       try {
-        this.sessions = await sessionsService.getSessions(selectedDate);
+        this.sessions = await sessionsService.getSessionsOfDay(selectedDate);
       } catch (e) {
-        this.error =
-          e.message || "Что-то пошло не так, повторите попытку позже";
+        this.$toast.open({
+          message: e,
+          type: 'error',
+        });
       }
-    },
-    clearError() {
-      this.error = "";
     },
   },
 };

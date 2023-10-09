@@ -23,7 +23,7 @@ describe("SessionService", () => {
       }),
     ];
     sessionsControllerMock = {
-      getSessions: jest.fn().mockReturnValue(() => daySessions),
+      getSessionsOfDay: jest.fn().mockReturnValue(() => daySessions),
     };
   });
 
@@ -33,7 +33,7 @@ describe("SessionService", () => {
     sessionsControllerMock = null;
   });
 
-  describe("Constructor", () => {
+  describe("Конструктор", () => {
     it("Проверка экземпляра", () => {
       const sessionsService = createService(sessionsControllerMock);
 
@@ -41,42 +41,40 @@ describe("SessionService", () => {
     });
   });
 
-  describe("Method get", () => {
-    it("Если корректный день, проверить что вызвался метод getSessions", async () => {
+  describe("Метод get", () => {
+    it("Если корректный день, проверить что вызвался метод getSessionsOfDay", async () => {
       const date = dayjs().startOf("day").add(1, "day").format("YYYY-MM-DD");
-      sessionsControllerMock.getSessions = jest.fn().mockReturnValue({
+      sessionsControllerMock.getSessionsOfDay = jest.fn().mockReturnValue({
         exists: jest.fn().mockReturnValue(true),
         val: jest.fn().mockImplementation(() => daySessions),
       });
       const sessionsService = createService(sessionsControllerMock);
-      const getSessionsServiceSpyOn = jest.spyOn(
+      const getSessionsOfDayServiceSpyOn = jest.spyOn(
         sessionsControllerMock,
-        "getSessions"
+        "getSessionsOfDay"
       );
 
-      await sessionsService.getSessions(date);
+      await sessionsService.getSessionsOfDay(date);
 
-      expect(getSessionsServiceSpyOn).toHaveBeenCalled();
+      expect(getSessionsOfDayServiceSpyOn).toHaveBeenCalled();
     });
 
     it("Если корректный день, вернуть массив сеансов", async () => {
       const date = dayjs().startOf("day").add(1, "day").format("YYYY-MM-DD");
-      sessionsControllerMock.getSessions = jest.fn().mockReturnValue({
+      sessionsControllerMock.getSessionsOfDay = jest.fn().mockReturnValue({
         exists: jest.fn().mockReturnValue(true),
         val: jest.fn().mockImplementation(() => daySessions),
       });
       const sessionsService = createService(sessionsControllerMock);
-      const expectedResult = sessionsService.transformSessionsForDisplay(
-        daySessions.map((session) => new Session(session))
-      );
+      const expectedResult = sessionsService.transformSessionsForDisplay(daySessions);
 
-      const sessions = await sessionsService.getSessions(date);
+      const sessions = await sessionsService.getSessionsOfDay(date);
 
       expect(sessions).toStrictEqual(expectedResult);
     });
   });
 
-  describe("Method isSessionExpiredToBuyTickets", () => {
+  describe("Метод isSessionExpiredToBuyTickets", () => {
     it("Должно вернуть true, если время еще не истекло", () => {
       const date = dayjs().startOf("day").add(1, "day");
       const sessionsService = createService(sessionsControllerMock);
@@ -96,7 +94,7 @@ describe("SessionService", () => {
     });
   });
 
-  describe("Method transformSessionsForDisplay", () => {
+  describe("Метод transformSessionsForDisplay", () => {
     it("Трансформация сессий корректно выполнилась", () => {
       const sessionsService = createService(sessionsControllerMock);
       sessionsService.isSessionExpiredToBuyTickets = jest
@@ -123,7 +121,7 @@ describe("SessionService", () => {
     });
   });
 
-  describe("Method isWithinRange", () => {
+  describe("Метод isWithinRange", () => {
     it("Должен вернуть false, если дата вне диапазона", () => {
       const date = dayjs().startOf("day").add(8, "day");
       const sessionsService = createService(sessionsControllerMock);
