@@ -26,8 +26,8 @@ describe("SessionsController", () => {
     mockData = null;
   });
 
-  describe("Метод get", () => {
-    it("Проверка на возврат данных из Firebase", async () => {
+  describe("Метод getSessionsOfDay", () => {
+    it("Должен возвращать данные пришедшие из Firebase", async () => {
       const selectedDate = "2023-10-03";
       get.mockReturnValue(Promise.resolve(mockData));
 
@@ -36,9 +36,9 @@ describe("SessionsController", () => {
       expect(result).toEqual(mockData);
     });
 
-    it("Проверка на ошибку при возврате данных из Firebase", async () => {
+    it("Должен выдавать ошибку при возврате данных из Firebase", async () => {
       const selectedDate = "2023-10-03";
-      const mockError = new Error('Firebase get error');
+      const mockError = new Error("Firebase get error");
       get.mockRejectedValueOnce(mockError);
 
       try {
@@ -49,8 +49,8 @@ describe("SessionsController", () => {
     });
   });
 
-  describe("Метод set", () => {
-    it("Проверка на корректную установку данных Firebase", async () => {
+  describe("Метод setSessionsOfDay", () => {
+    it("Должен корректно установить данные в Firebase", async () => {
       const setSpy = jest.spyOn(sessionsController, "setSessionsOfDay");
       set.mockReturnValue(Promise.resolve());
 
@@ -60,8 +60,8 @@ describe("SessionsController", () => {
       expect(setSpy).toHaveBeenCalledWith(mockData);
     });
 
-    it("Проверка на некорректную установку данных Firebase", async () => {
-      const mockError = new Error('Firebase set error');
+    it("Должен выдать ошибку при некорректной установке данных в Firebase", async () => {
+      const mockError = new Error("Firebase set error");
       set.mockRejectedValueOnce(mockError);
 
       try {

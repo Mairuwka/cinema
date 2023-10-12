@@ -8,7 +8,6 @@ import {
 
 export class SessionsController extends FirebaseController {
   getSessionsOfDay(date) {
-    // eslint-disable-next-line no-useless-catch
     try {
       const ref = firebaseChild(firebaseRef(this.database, "sessions"), date);
 
@@ -20,7 +19,6 @@ export class SessionsController extends FirebaseController {
   }
 
   setSessionsOfDay(data) {
-    // eslint-disable-next-line no-useless-catch
     try {
       const ref = firebaseRef(this.database, "sessions");
 

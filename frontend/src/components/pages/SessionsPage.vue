@@ -34,7 +34,7 @@ export default {
       } catch (e) {
         this.$toast.open({
           message: e,
-          type: 'error',
+          type: "error",
         });
       }
     },

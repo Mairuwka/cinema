@@ -11,7 +11,6 @@ export class SessionsService {
   async getSessionsOfDay(date) {
     let sessions = [];
 
-    // eslint-disable-next-line no-useless-catch
     try {
       const snapshot = await this.api.getSessionsOfDay(date);
 
