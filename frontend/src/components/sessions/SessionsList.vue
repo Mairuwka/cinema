@@ -9,7 +9,6 @@
       :isActiveCard="session.isActiveCard"
     />
   </div>
-  <div v-else>Сессий на данный период нет</div>
 </template>
 
 <script>

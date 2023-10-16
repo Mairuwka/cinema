@@ -4,21 +4,36 @@ import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 
 export class SessionsService {
-  constructor(controller) {
-    this.controller = controller;
+  constructor(api) {
+    this.api = api;
   }
 
-  async getSessions(date) {
-    try {
-      const snapshot = await this.controller.getSessions(date);
+  async getSessionsOfDay(date) {
+    let sessions = [];
 
-      if (snapshot.exists()) {
-        const sessions = snapshot.val();
-        return sessions.map((session) => new Session(session));
+    try {
+      const snapshot = await this.api.getSessionsOfDay(date);
+
+      if (snapshot.exists() && this.isWithinRange(dayjs(date))) {
+        sessions = snapshot.val();
+      } else {
+        throw new Error("Сессии отсутствуют");
       }
     } catch (error) {
-      throw "Ошибка при получении сессий: " + error;
+      throw error.message || "Что-то пошло не так, повторите попытку позже";
     }
+
+    return this.transformSessionsForDisplay(
+      sessions.map((session) => new Session(session))
+    );
+  }
+
+  isWithinRange(dateToCheck) {
+    const currentDate = dayjs().startOf("day");
+    const startDate = currentDate.subtract(7, "day");
+    const endDate = currentDate.add(7, "day");
+
+    return dateToCheck.isBetween(startDate, endDate, null, "[]");
   }
 
   isSessionExpiredToBuyTickets(date) {

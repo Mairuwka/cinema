@@ -6,9 +6,10 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/sessions",
     name: "sessions",
     component: SessionsPage,
+    alias: "/",
   },
 ];
 

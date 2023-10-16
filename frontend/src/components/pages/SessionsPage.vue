@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SessionCalendar @date-selected="updateSelectedDate" />
+    <SessionCalendar @date-selected="setSessionsOfDay($event)" />
     <SessionsList :sessions="sessions" />
   </div>
 </template>
@@ -10,8 +10,10 @@ import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
 import { SessionsService } from "@/services/session/SessionsService";
 import { sessionsController } from "../../../../backend/src/index";
+import { SessionsApi } from "@/api/sessions/SessionsApi";
 
-const sessionsService = new SessionsService(sessionsController);
+const sessionsApi = new SessionsApi(sessionsController);
+const sessionsService = new SessionsService(sessionsApi);
 
 export default {
   components: {
@@ -20,34 +22,21 @@ export default {
   },
   data() {
     return {
-      selectedDate: null,
       sessions: [],
     };
   },
-  watch: {
-    async selectedDate(selectedDate) {
+  methods: {
+    async setSessionsOfDay(selectedDate) {
       this.sessions = [];
-      let sessionsForDay = [];
 
       try {
-        sessionsForDay = await sessionsService.getSessions(selectedDate);
+        this.sessions = await sessionsService.getSessionsOfDay(selectedDate);
       } catch (e) {
-        console.log(e);
-        return;
-        // TODO дальнейшая реализация показа ошибки
+        this.$toast.open({
+          message: e,
+          type: "error",
+        });
       }
-
-      if (!sessionsForDay) {
-        return;
-      }
-
-      this.sessions =
-        sessionsService.transformSessionsForDisplay(sessionsForDay);
-    },
-  },
-  methods: {
-    updateSelectedDate(date) {
-      this.selectedDate = date;
     },
   },
 };
