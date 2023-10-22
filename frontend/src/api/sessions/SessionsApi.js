@@ -6,11 +6,7 @@ export class SessionsApi {
   async getSessionsOfDay(date) {
     let sessions = [];
 
-    try {
-      sessions = await this.controller.getSessionsOfDay(date);
-    } catch (error) {
-      throw error;
-    }
+    sessions = await this.controller.getSessionsOfDay(date);
 
     return sessions;
   }
