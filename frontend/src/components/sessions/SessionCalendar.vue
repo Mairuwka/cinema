@@ -24,7 +24,14 @@ export default {
   },
   methods: {
     onDateSelected() {
-      this.$emit("date-selected", this.selectedDate);
+      if (dayjs(this.selectedDate).isValid()) {
+        this.$emit("date-selected", this.selectedDate);
+      } else {
+        this.$toast.open({
+          message: "Укажите правильную дату",
+          type: "error",
+        });
+      }
     },
   },
 };

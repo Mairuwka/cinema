@@ -2,7 +2,7 @@ import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionItem from "@/components/sessions/SessionItem.vue";
 import { shallowMount } from "@vue/test-utils";
 
-describe("SessionsList", () => {
+describe(SessionsList.name, () => {
   let wrapper;
 
   const createComponent = (props) => {
@@ -12,7 +12,9 @@ describe("SessionsList", () => {
   };
 
   afterEach(() => {
+    jest.clearAllMocks();
     wrapper.destroy();
+    wrapper = null;
   });
 
   it("Должен отображать список сессий, если они переданы через props 'sessions'", () => {
@@ -32,10 +34,10 @@ describe("SessionsList", () => {
         isActiveCard: true,
       },
     ];
+
     createComponent({
       sessions,
     });
-
     const sessionItems = wrapper.findAllComponents(SessionItem);
 
     expect(sessionItems).toHaveLength(sessions.length);

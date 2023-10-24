@@ -1,7 +1,7 @@
 import SessionItem from "@/components/sessions/SessionItem.vue";
 import { shallowMount } from "@vue/test-utils";
 
-describe("SessionItem", () => {
+describe(SessionItem.name, () => {
   let wrapper;
 
   const createComponent = (props) => {
@@ -11,7 +11,9 @@ describe("SessionItem", () => {
   };
 
   afterEach(() => {
+    jest.clearAllMocks();
     wrapper.destroy();
+    wrapper = null;
   });
 
   it("Должен отображать компонент с заданными свойствами", async () => {
@@ -19,6 +21,7 @@ describe("SessionItem", () => {
     const sessionStartTime = "Test Start Time";
     const sessionEndTime = "Test End Time";
     const isActiveCard = true;
+
     createComponent({
       title,
       sessionStartTime,
@@ -30,8 +33,6 @@ describe("SessionItem", () => {
     expect(wrapper.text()).toContain(title);
     expect(wrapper.text()).toContain(sessionStartTime);
     expect(wrapper.text()).toContain(sessionEndTime);
-    if (isActiveCard) {
-      expect(sessionCard.classes()).toContain("card-active");
-    }
+    expect(sessionCard.classes()).toContain("card-active");
   });
 });
