@@ -8,14 +8,10 @@
 <script>
 import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
-import { SessionsService } from "@/services/session/SessionsService";
-import { sessionsController } from "../../../../backend/src/index";
-import { SessionsApi } from "@/api/sessions/SessionsApi";
-
-const sessionsApi = new SessionsApi(sessionsController);
-const sessionsService = new SessionsService(sessionsApi);
+import { sessionsService } from "@/services/ioc/iocSessionsPage";
 
 export default {
+  name: "SessionsPage",
   components: {
     SessionsList,
     SessionCalendar,

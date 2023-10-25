@@ -14,6 +14,7 @@
 import dayjs from "dayjs";
 
 export default {
+  name: "SessionCalendar",
   data() {
     return {
       selectedDate: dayjs().format("YYYY-MM-DD"),
@@ -24,7 +25,14 @@ export default {
   },
   methods: {
     onDateSelected() {
-      this.$emit("date-selected", this.selectedDate);
+      if (dayjs(this.selectedDate).isValid()) {
+        this.$emit("date-selected", this.selectedDate);
+      } else {
+        this.$toast.open({
+          message: "Укажите правильную дату",
+          type: "error",
+        });
+      }
     },
   },
 };

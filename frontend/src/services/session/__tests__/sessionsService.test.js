@@ -61,7 +61,8 @@ describe("SessionService", () => {
     it("Должен вернуть массив сеансов, если передан корректный день", async () => {
       const date = dayjs().startOf("day").add(1, "day").format("YYYY-MM-DD");
       const sessionsService = createService(sessionsControllerMock);
-      const expectedResult = sessionsService.transformSessionsForDisplay(daySessions);
+      const expectedResult =
+        sessionsService.transformSessionsForDisplay(daySessions);
 
       const sessions = await sessionsService.getSessionsOfDay(date);
 
