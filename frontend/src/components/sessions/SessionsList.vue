@@ -15,6 +15,7 @@
 import SessionItem from "@/components/sessions/SessionItem.vue";
 
 export default {
+  name: "SessionsList",
   props: {
     sessions: {
       type: Array,

@@ -11,6 +11,7 @@
 
 <script>
 export default {
+  name: "SessionItem",
   props: {
     title: {
       type: String,

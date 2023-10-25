@@ -14,6 +14,7 @@
 import dayjs from "dayjs";
 
 export default {
+  name: "SessionCalendar",
   data() {
     return {
       selectedDate: dayjs().format("YYYY-MM-DD"),
