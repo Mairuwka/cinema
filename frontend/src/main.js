@@ -1,14 +1,12 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
 import router from "@/router/router";
-import VueToast from "vue-toast-notification";
+import ToastPlugin from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-default.css";
 
-Vue.use(VueToast);
+const app = createApp(App);
 
-const app = new Vue({
-  router,
-  render: (h) => h(App),
-});
+app.use(ToastPlugin);
+app.use(router);
 
-app.$mount("#app");
+app.mount("#app");
