@@ -1,5 +1,8 @@
+import App from "@/App.vue";
 import SessionItem from "@/components/sessions/SessionItem.vue";
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, enableAutoUnmount } from "@vue/test-utils";
+
+enableAutoUnmount(afterEach);
 
 describe(SessionItem.name, () => {
   let wrapper;
@@ -9,12 +12,6 @@ describe(SessionItem.name, () => {
       propsData: props,
     });
   };
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    wrapper.destroy();
-    wrapper = null;
-  });
 
   it("Должен отображать компонент с заданными свойствами", async () => {
     const title = "Test Title";

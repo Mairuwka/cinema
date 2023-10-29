@@ -1,11 +1,12 @@
+import App from "@/App.vue";
 import SessionCalendar from "@/components/sessions/SessionCalendar.vue";
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, enableAutoUnmount } from "@vue/test-utils";
 
-jest.mock("vue-toast-notification", () => {
-  return {
-    VueToast: jest.fn(),
-  };
-});
+enableAutoUnmount(afterEach);
+
+jest.mock("vue-toast-notification", () => ({
+  ToastPlugin: jest.fn(),
+}));
 
 describe(SessionCalendar.name, () => {
   let wrapper;
@@ -13,12 +14,6 @@ describe(SessionCalendar.name, () => {
   const createComponent = (options) => {
     wrapper = shallowMount(SessionCalendar, options);
   };
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    wrapper.destroy();
-    wrapper = null;
-  });
 
   it("Должен вернуть true, если SessionsCalendar отрисован", () => {
     createComponent();
@@ -40,9 +35,11 @@ describe(SessionCalendar.name, () => {
   it("Должен пропускать эмит события date-selected когда выбрана невалидная дата", async () => {
     const mockToastOpen = jest.fn();
     createComponent({
-      mocks: {
-        $toast: {
-          open: mockToastOpen,
+      global: {
+        mocks: {
+          $toast: {
+            open: mockToastOpen,
+          },
         },
       },
     });

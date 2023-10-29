@@ -1,6 +1,7 @@
 module.exports = {
+  moduleFileExtensions: ["js", "vue"],
   transform: {
-    "^.+\\.vue$": "vue-jest",
+    "^.+\\.vue$": "@vue/vue3-jest",
     "^.+\\.jsx?$": "babel-jest",
   },
   moduleNameMapper: {
@@ -8,4 +9,7 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   testEnvironment: "jsdom",
+  testEnvironmentOptions: {
+    customExportConditions: ["jsdom-addons"],
+  },
 };

@@ -1,6 +1,9 @@
+import App from "@/App.vue";
 import SessionsList from "@/components/sessions/SessionsList.vue";
 import SessionItem from "@/components/sessions/SessionItem.vue";
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, enableAutoUnmount } from "@vue/test-utils";
+
+enableAutoUnmount(afterEach);
 
 describe(SessionsList.name, () => {
   let wrapper;
@@ -10,12 +13,6 @@ describe(SessionsList.name, () => {
       propsData: props,
     });
   };
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    wrapper.destroy();
-    wrapper = null;
-  });
 
   it("Должен отображать список сессий, если они переданы через props 'sessions'", () => {
     const sessions = [
